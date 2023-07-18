@@ -1,0 +1,26 @@
+[HIMDBVersion]
+2.0
+[DATABASE_VERSION]
+"1.2" 
+[CURRENT_PROJECT]
+"sysmain" 
+[GENERAL_DATA]
+"ECXLABEL_LAST_FINDS_DATA" "" 
+[BREAKPOINTS]
+[OPEN_WORKSPACE_FILES]
+[WORKSPACE_FILE_STATES]
+[LOADED_PROJECTS]
+"config" 
+"drv" 
+"libdrvif" 
+"libstr" 
+"libsvc" 
+"libtk" 
+"libtm" 
+"monitor" 
+"sysinit" 
+"sysmain" 
+"sysmgr" 
+"tkernel" 
+"tkse" 
+[END]
