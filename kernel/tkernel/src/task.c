@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -179,8 +176,7 @@ EXPORT TCB* time_slice_schedule( TCB *tcb )
  * Reselect task to execute
  *	Set 'schedtsk' to the head task at the ready queue.
  */
-#pragma inline(reschedule)
-static void reschedule( void )
+Inline void reschedule( void )
 {
 	TCB	*toptsk;
 
@@ -330,12 +326,3 @@ SYSCALL INT _td_rdy_que( PRI pri, ID list[], INT nent )
 #endif /* USE_FUNC_TD_RDY_QUE */
 
 #endif /* USE_DBGSPT */
-
-/*
- * If the task is alive ( except NON-EXISTENT,DORMANT ), return TRUE.
- */
-#pragma inline(task_alive)
-static BOOL task_alive( TSTAT state )
-{
-	return ( (state & (TS_READY|TS_WAIT|TS_SUSPEND)) != 0 );
-}

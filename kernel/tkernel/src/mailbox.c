@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2012/10/24.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -112,8 +109,7 @@ EXPORT ER mailbox_initialize( void )
 /*
  * Insert a message queue following priority
  */
-#pragma inline(queue_insert_mpri)
-static void queue_insert_mpri( T_MSG_PRI *pk_msg, T_MSG *head )
+Inline void queue_insert_mpri( T_MSG_PRI *pk_msg, T_MSG *head )
 {
 	T_MSG_PRI	*msg;
 	T_MSG		*prevmsg = head;

@@ -1,262 +1,215 @@
-;/*
-; *----------------------------------------------------------------------
-; *    UCT T-Kernel 2.0 DevKit tuned
-; *
-; *    Copyright (c) 2013 UC Technology. All Rights Reserved.
-; *----------------------------------------------------------------------
-; *
-; *    Version:   2.00.00
-; *    Released by UC Technology (http://www.uctec.com/) at 2013/06/14.
-; *
-; *----------------------------------------------------------------------
-; */
+/*
+ *----------------------------------------------------------------------
+ *    UCT T-Kernel 2.0 DevKit tuned
+ *
+ *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *----------------------------------------------------------------------
+ *
+ *    Version:   2.00.00
+ *    Released by UC Technology (http://www.uctec.com/) at 2013/06/14.
+ *
+ *----------------------------------------------------------------------
+ */
 
-;/*
-; *	Not Supported T-Kernel system call
-; *
-; *	To select not support system call,
-; *	remark "USE_FUNC_TD_XXX_YYY" macro in "config/tk_config_func.h"
-; *
-; */
+/*
+ *	Not Supported T-Kernel system call
+ *
+ *	To select not support system call,
+ *	remark "USE_FUNC_TD_XXX_YYY" macro in "config/tk_config_func.h"
+ *
+ */
 
-	.aifdef	USE_FUNC_TD_LST_TSK
-	.aelse
-__td_lst_tsk:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_TSK
+__td_lst_tsk:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_SEM
-	.aelse
-__td_lst_sem:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_SEM
+__td_lst_sem:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_FLG
-	.aelse
-__td_lst_flg:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_FLG
+__td_lst_flg:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_MBX
-	.aelse
-__td_lst_mbx:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_MBX
+__td_lst_mbx:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_MTX
-	.aelse
-__td_lst_mtx:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_MTX
+__td_lst_mtx:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_MBF
-	.aelse
-__td_lst_mbf:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_MBF
+__td_lst_mbf:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_POR
-	.aelse
-__td_lst_por:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_POR
+__td_lst_por:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_MPF
-	.aelse
-__td_lst_mpf:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_MPF
+__td_lst_mpf:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_MPL
-	.aelse
-__td_lst_mpl:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_MPL
+__td_lst_mpl:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_CYC
-	.aelse
-__td_lst_cyc:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_CYC
+__td_lst_cyc:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_ALM
-	.aelse
-__td_lst_alm:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_ALM
+__td_lst_alm:
+#endif
 
-	.aifdef	USE_FUNC_TD_LST_SSY
-	.aelse
-__td_lst_ssy:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_LST_SSY
+__td_lst_ssy:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_SEM
-	.aelse
-__td_ref_sem:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_SEM
+__td_ref_sem:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_FLG
-	.aelse
-__td_ref_flg:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_FLG
+__td_ref_flg:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_MBX
-	.aelse
-__td_ref_mbx:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_MBX
+__td_ref_mbx:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_MTX
-	.aelse
-__td_ref_mtx:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_MTX
+__td_ref_mtx:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_MBF
-	.aelse
-__td_ref_mbf:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_MBF
+__td_ref_mbf:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_POR
-	.aelse
-__td_ref_por:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_POR
+__td_ref_por:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_MPF
-	.aelse
-__td_ref_mpf:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_MPF
+__td_ref_mpf:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_MPL
-	.aelse
-__td_ref_mpl:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_MPL
+__td_ref_mpl:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_CYC
-	.aelse
-__td_ref_cyc:	.define	"_no_support"
-__td_ref_cyc_u:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_CYC
+__td_ref_cyc:
+__td_ref_cyc_u:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_ALM
-	.aelse
-__td_ref_alm:	.define	"_no_support"
-__td_ref_alm_u:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_ALM
+__td_ref_alm:
+__td_ref_alm_u:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_SSY
-	.aelse
-__td_ref_ssy:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_SSY
+__td_ref_ssy:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_TSK
-	.aelse
-__td_ref_tsk:	.define	"_no_support"
-__td_ref_tsk_u:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_TSK
+__td_ref_tsk:
+__td_ref_tsk_u:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_TEX
-	.aelse
-__td_ref_tex:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_TEX
+__td_ref_tex:
+#endif
 
-	.aifdef	USE_FUNC_TD_INF_TSK
-	.aelse
-__td_inf_tsk:	.define	"_no_support"
-__td_inf_tsk_u:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_INF_TSK
+__td_inf_tsk:
+__td_inf_tsk_u:
+#endif
 
-	.aifdef	USE_FUNC_TD_GET_REG
-	.aelse
-__td_get_reg:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_GET_REG
+__td_get_reg:
+#endif
 
-	.aifdef	USE_FUNC_TD_SET_REG
-	.aelse
-__td_set_reg:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_SET_REG
+__td_set_reg:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_SYS
-	.aelse
-__td_ref_sys:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_SYS
+__td_ref_sys:
+#endif
 
-	.aifdef	USE_FUNC_TD_GET_TIM
-	.aelse
-__td_get_tim:	.define	"_no_support"
-__td_get_tim_u:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_GET_TIM
+__td_get_tim:
+__td_get_tim_u:
+#endif
 
-	.aifdef	USE_FUNC_TD_GET_OTM
-	.aelse
-__td_get_otm:	.define	"_no_support"
-__td_get_otm_u:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_GET_OTM
+__td_get_otm:
+__td_get_otm_u:
+#endif
 
-	.aifdef	USE_FUNC_TD_RDY_QUE
-	.aelse
-__td_rdy_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_RDY_QUE
+__td_rdy_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_SEM_QUE
-	.aelse
-__td_sem_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_SEM_QUE
+__td_sem_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_FLG_QUE
-	.aelse
-__td_flg_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_FLG_QUE
+__td_flg_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_MBX_QUE
-	.aelse
-__td_mbx_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_MBX_QUE
+__td_mbx_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_MTX_QUE
-	.aelse
-__td_mtx_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_MTX_QUE
+__td_mtx_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_SMBF_QUE
-	.aelse
-__td_smbf_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_SMBF_QUE
+__td_smbf_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_RMBF_QUE
-	.aelse
-__td_rmbf_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_RMBF_QUE
+__td_rmbf_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_CAL_QUE
-	.aelse
-__td_cal_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_CAL_QUE
+__td_cal_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_ACP_QUE
-	.aelse
-__td_acp_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_ACP_QUE
+__td_acp_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_MPF_QUE
-	.aelse
-__td_mpf_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_MPF_QUE
+__td_mpf_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_MPL_QUE
-	.aelse
-__td_mpl_que:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_MPL_QUE
+__td_mpl_que:
+#endif
 
-	.aifdef	USE_FUNC_TD_HOK_SVC
-	.aelse
-__td_hok_svc:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_HOK_SVC
+__td_hok_svc:
+#endif
 
-	.aifdef	USE_FUNC_TD_HOK_DSP
-	.aelse
-__td_hok_dsp:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_HOK_DSP
+__td_hok_dsp:
+#endif
 
-	.aifdef	USE_FUNC_TD_HOK_INT
-	.aelse
-__td_hok_int:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_HOK_INT
+__td_hok_int:
+#endif
 
-	.aifdef	USE_FUNC_TD_REF_DSNAME
-	.aelse
-__td_ref_dsname:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_REF_DSNAME
+__td_ref_dsname:
+#endif
 
-	.aifdef	USE_FUNC_TD_SET_DSNAME
-	.aelse
-__td_set_dsname:	.define	"_no_support"
-	.aendi
+#ifndef	USE_FUNC_TD_SET_DSNAME
+__td_set_dsname:
+#endif
 

@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -218,49 +215,3 @@ EXPORT void timer_handler( void )
 
 	end_of_hw_timer_interrupt();		/* Clear timer interrupt */
 }
-
-
-/*
- * SYSTIM internal expression and conversion
- */
-#pragma inline(toLSYSTIM)
-static LSYSTIM toLSYSTIM( CONST SYSTIM *time )
-{
-	LSYSTIM		ltime;
-
-	hilo_ll(ltime, time->hi, time->lo);
-
-	/* conversion from milliseconds to microseconds */
-	ltime = li_mul(ltime, 1000);
-
-	return ltime;
-}
-
-#pragma inline(toSYSTIM)
-static SYSTIM toSYSTIM( LSYSTIM ltime, UINT *us )
-{
-	SYSTIM		time;
-	longlong	t;
-
-	/* conversion from microseconds to milliseconds (truncate) */
-	t = li_div(ltime, 1000);
-
-	if ( us != NULL ) {
-		/* return the sub-millisecond residue in microseconds */
-		*us = lltol(ll_sub(ltime, li_mul(t, 1000)));
-	}
-
-	ll_hilo(time.hi, time.lo, t);
-
-	return time;
-}
-
-/*
- * Delete from timer queue
- */
-#pragma inline(timer_delete)
-static void timer_delete( TMEB *event )
-{
-	QueRemove(&event->queue);
-}
-

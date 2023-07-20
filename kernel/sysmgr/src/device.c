@@ -11,11 +11,8 @@
  *    Modified by T-Engine Forum at 2013/01/12.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -134,8 +131,7 @@ LOCAL	INT		MaxRegDev;	/* Maximum number of device
 /*
  * Verify validity of device ID
  */
-#pragma inline(check_devid)
-static ER check_devid( ID devid )
+Inline ER check_devid( ID devid )
 {
 	devid >>= 8;
 	if ( devid < 1 || devid > MaxRegDev ) {

@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -60,17 +57,39 @@ IMPORT RDYQUE	ready_queue;
 /*
  * Ready queue initialization
  */
-IMPORT void ready_queue_initialize( RDYQUE *rq );
+Inline void ready_queue_initialize( RDYQUE *rq )
+{
+	INT	i;
+
+	rq->top_priority = NUM_PRI;
+	for ( i = 0; i < NUM_PRI; i++ ) {
+		QueInit(&rq->tskque[i]);
+	}
+	rq->null = NULL;
+	rq->klocktsk = NULL;
+	memset(rq->bitmap, 0, sizeof(rq->bitmap));
+}
 
 /*
  * Return the highest priority task in ready queue
  */
-IMPORT TCB* ready_queue_top( RDYQUE *rq );
+Inline TCB* ready_queue_top( RDYQUE *rq )
+{
+	/* If there is a task at kernel lock, that is the highest priority task */
+	if ( rq->klocktsk != NULL ) {
+		return rq->klocktsk;
+	}
+
+	return (TCB*)rq->tskque[rq->top_priority].next;
+}
 
 /*
  * Return the priority of the highest priority task in the ready queue
  */
-IMPORT INT ready_queue_top_priority( const RDYQUE *rq );
+Inline INT ready_queue_top_priority( const RDYQUE *rq )
+{
+	return rq->top_priority;
+}
 
 /*
  * Insert task in ready queue
@@ -79,12 +98,44 @@ IMPORT INT ready_queue_top_priority( const RDYQUE *rq );
  *	update 'top_priority' if necessary. When updating 'top_priority,'
  *	return TRUE, otherwise FALSE.
  */
-IMPORT BOOL ready_queue_insert( RDYQUE *rq, TCB *tcb );
+Inline BOOL ready_queue_insert( RDYQUE *rq, TCB *tcb )
+{
+	INT	priority = tcb->priority;
+
+	tcb->slicecnt = 0;
+
+	QueInsert(&tcb->tskque, &rq->tskque[priority]);
+	tstdlib_bitset(rq->bitmap, priority);
+
+	if ( tcb->klocked ) {
+		rq->klocktsk = tcb;
+	}
+
+	if ( priority < rq->top_priority ) {
+		rq->top_priority = priority;
+		return TRUE;
+	}
+	return FALSE;
+}
 
 /*
  * Insert task at head in ready queue
  */
-IMPORT void ready_queue_insert_top( RDYQUE *rq, TCB *tcb );
+Inline void ready_queue_insert_top( RDYQUE *rq, TCB *tcb )
+{
+	INT	priority = tcb->priority;
+
+	QueInsert(&tcb->tskque, rq->tskque[priority].next);
+	tstdlib_bitset(rq->bitmap, priority);
+
+	if ( tcb->klocked ) {
+		rq->klocktsk = tcb;
+	}
+
+	if ( priority < rq->top_priority ) {
+		rq->top_priority = priority;
+	}
+}
 
 /*
  * Delete task from ready queue
@@ -94,17 +145,68 @@ IMPORT void ready_queue_insert_top( RDYQUE *rq, TCB *tcb );
  *	priority. In such case, use the bitmap area to search the second
  *	highest priority task.
  */
-IMPORT void ready_queue_delete( RDYQUE *rq, TCB *tcb );
+Inline void ready_queue_delete( RDYQUE *rq, TCB *tcb )
+{
+	INT	priority = tcb->priority;
+	INT	i;
+
+	if ( rq->klocktsk == tcb ) {
+		rq->klocktsk = NULL;
+	}
+
+	QueRemove(&tcb->tskque);
+	if ( tcb->klockwait ) {
+		/* Delete from kernel lock wait queue */
+		tcb->klockwait = FALSE;
+		return;
+	}
+	if ( !isQueEmpty(&rq->tskque[priority]) ) {
+		return;
+	}
+
+	tstdlib_bitclr(rq->bitmap, priority);
+	if ( priority != rq->top_priority ) {
+		return;
+	}
+
+	i = tstdlib_bitsearch1_binsearch(rq->bitmap, priority, NUM_PRI - priority);
+	if ( i >= 0 ) {
+		rq->top_priority = priority + i;
+	} else {
+		rq->top_priority = NUM_PRI;
+	}
+}
 
 /*
  * Move the task, whose ready queue priority is 'priority', at head of
  * queue to the end of queue. Do nothing, if the queue is empty.
  */
-IMPORT void ready_queue_rotate( RDYQUE *rq, INT priority );
+Inline void ready_queue_rotate( RDYQUE *rq, INT priority )
+{
+	QUEUE	*tskque = &rq->tskque[priority];
+	TCB	*tcb;
+
+	tcb = (TCB*)QueRemoveNext(tskque);
+	if ( tcb != NULL ) {
+		QueInsert((QUEUE*)tcb, tskque);
+
+		tcb->slicecnt = 0;
+	}
+}
 
 /*
  * Put 'tcb' to the end of ready queue.
  */
-IMPORT TCB* ready_queue_move_last( RDYQUE *rq, TCB *tcb );
+Inline TCB* ready_queue_move_last( RDYQUE *rq, TCB *tcb )
+{
+	QUEUE	*tskque = &rq->tskque[tcb->priority];
+
+	QueRemove(&tcb->tskque);
+	QueInsert(&tcb->tskque, tskque);
+
+	tcb->slicecnt = 0;
+
+	return (TCB*)tskque->next;	/* New task at head of queue */
+}
 
 #endif /* _READY_QUEUE_ */

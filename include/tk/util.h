@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/28.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -81,40 +78,6 @@ union objname {
 		const static union objname _nm = { name };	\
 		exinf = _nm.i;					\
 	}
-
-/*
- * User-mode fast Lock
- */
-typedef struct {
-	UINT	misc;
-	INT	cnt;
-	ID	id;
-} FastULock;
-
-IMPORT ER CreateULock( FastULock *lock, CONST UB *name );
-IMPORT void DeleteULock( FastULock *lock );
-IMPORT void ULock( FastULock *lock );
-IMPORT void UUnlock( FastULock *lock );
-
-/*
- * User-mode multi Lock
- *	Can use the maximum of 32 independent locks with a single FastUMLock.
- *	Divided by the lock number (no). Can specify 0-31 for 'no.'
- *	(Slightly less efficient than FastULock)
- */
-typedef struct {
-	UINT	misc;
-	UINT	flg;
-	UINT	wai;
-	ID	id;
-} FastUMLock;
-
-IMPORT ER CreateUMLock( FastUMLock *lock, CONST UB *name );
-IMPORT ER DeleteUMLock( FastUMLock *lock );
-IMPORT ER UMLockTmo( FastUMLock *lock, INT no, TMO tmout );
-IMPORT ER UMLockTmo_u( FastUMLock *lock, INT no, TMO_U tmout_u );
-IMPORT ER UMLock( FastUMLock *lock, INT no );
-IMPORT ER UMUnlock( FastUMLock *lock, INT no );
 
 #ifdef __cplusplus
 }

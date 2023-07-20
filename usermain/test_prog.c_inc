@@ -1,0 +1,235 @@
+/*
+ *----------------------------------------------------------------------
+ *    T-Kernel 2.0 Software Package
+ *
+ *    Copyright 2011 by Ken Sakamura.
+ *    This software is distributed under the T-License 2.0.
+ *----------------------------------------------------------------------
+ *
+ *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
+ *
+ *----------------------------------------------------------------------
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
+ *----------------------------------------------------------------------
+ */
+
+/*
+ *	test_prog.c (usermain)
+ */
+
+#if	USE_TEST_SERIAL
+/*-----------------------------------------------------------------------------
+	test_serial() - serial driver (console) test
+-----------------------------------------------------------------------------*/
+#include <sys/consio.h>
+#include <device/serialio.h>
+#include <device/rs.h>
+
+LOCAL	void	test_serial( void )
+{
+	ER	er;
+	W	alen, len, tmo, dd;
+	B	buf[256];
+	char	*bp;
+	RsFlow	flow;
+
+	P("Serial driver test\n");
+    for (;;) {
+	P(">> ");
+	Gets(bp = (char*)buf, sizeof(buf));
+	switch(*bp++) {
+	case 'q':	return;
+
+	case 'f':
+		er = serial_ctl(0, - DN_RSFLOW, (UW*)&flow);
+		if (er < E_OK) {
+			P("serial_ctl: - DN_RSFLOW [%x]\n", er);
+			break;
+		}
+		P("serial_ctl: flow:cs=%d rs=%d sx=%d rx=%d\n",
+			flow.csflow, flow.rsflow, flow.sxflow, flow.rxflow);
+		while(*bp <= ' ' && *bp != '\0') bp++;
+		if (*bp == '\0') break;
+		while(*bp >= ' ') {
+			switch(*bp++) {
+			case 'c':	flow.csflow ^= 1;	break;
+			case 'r':	flow.rsflow ^= 1;	break;
+			case 'S':	flow.sxflow ^= 1;	break;
+			case 'R':	flow.rxflow ^= 1;	break;
+			}
+		}
+		er = serial_ctl(0, DN_RSFLOW, (UW*)&flow);
+		if (er < E_OK) {
+			P("serial_ctl: DN_RSFLOW [%x]\n", er);
+		} else {
+			P("serial_ctl: flow:cs=%d rs=%d sx=%d rx=%d\n",
+				flow.csflow, flow.rsflow, flow.sxflow,
+				flow.rxflow);
+		}
+		break;
+
+	case 'l':	/* loop back test */
+		for (;;) {
+			er = serial_in(0, buf, 1, &alen, -1);
+			if (er >= E_OK) {
+				serial_in(0, &buf[1], sizeof(buf)-1, &alen, 0);
+				alen += 1;
+			}
+			if (er < E_OK && er != E_TMOUT) {
+				P("\nserial_in: [%#x] alen=%d\n", er, alen);
+			}
+			if (alen >= 0) {
+				er = serial_out(0, buf, alen, &alen, -1);
+				if (er < E_OK && er != E_TMOUT) {
+					P("\nserial_out: [%#x] alen=%d\n",
+								er, alen);
+				}
+				if (buf[0] == '!') break;
+			}
+		}
+		break;
+
+	case 's':	/* serial_in/out */
+		len = strtol(bp, &bp, 0);
+		tmo = strtol(bp, &bp, 0);
+		if (len <= 0) { len = 1; tmo = -1; }
+		else if (len > sizeof(buf)) len = sizeof(buf);
+		er = serial_in(0, buf, len, &alen, tmo);
+		if (er < E_OK) {
+			P("\nserial_in: [%#x] alen=%d\n", er, alen);
+		}
+		if (alen >= 0) {
+			er = serial_out(0, buf, alen, &alen, 10000);
+			if (er < E_OK) {
+				P("\nserial_out: [%#x] alen=%d\n", er, alen);
+			}
+		}
+		break;
+
+	case 'r':	/* rs driver - srea_dev. swri_dev */
+		len = strtol(bp, &bp, 0);
+		tmo = strtol(bp, &bp, 0);
+		if (len <= 0) { len = 1; tmo = -1; }
+		else if (len > sizeof(buf)) len = sizeof(buf);
+		dd = er = tk_opn_dev((UB*)"rsa", TD_UPDATE);
+		if (er < 0) {
+			P("rsa open [%#x]\n", er);
+			break;
+		}
+		er = tk_swri_dev(dd, DN_RSRCVTMO, &tmo, sizeof(W), &alen);
+		if (er < E_OK) {
+			P("ras rsrcvtmo [%#x]\n", er);
+		}
+		er = tk_srea_dev(dd, 0, buf, len, &alen);
+		if (er < E_OK) {
+			P("\nsrea_dev: [%#x] alen=%d\n", er, alen);
+		}
+		if (alen >= 0) {
+			er = tk_swri_dev(dd, 0, buf, alen, &alen);
+			if (er < E_OK) {
+				P("\nswri_dev: [%#x] alen=%d\n", er, alen);
+			}
+		}
+		er = tk_cls_dev(dd, 0);
+		if (er < 0) {
+			P("rsa close [%#x]\n", er);
+		}
+		break;
+
+	default:
+		if (buf[0] == '\0') break;
+		P("f [SRcr]      -- get/sey flow control\n");
+		P("l             -- loop back test, key-in '!' to finish\n");
+		P("s [len] [tmo] -- serial driver in/out test\n");
+		P("r [len] [tmo] -- rs driver in/out test\n");
+		P("q             -- quit\n");
+		break;
+	}
+    }
+}
+#endif	/* USE_TEST_SERIAL */
+
+#if	USE_TEST_TASK
+/*-----------------------------------------------------------------------------
+	test_task() - simple task test
+-----------------------------------------------------------------------------*/
+/*
+ *  Simple task test - sub task
+ */
+LOCAL	void	sub_task( INT stacd, void *exinf )
+{
+	INT	i;
+
+	P("3 - Sub task started (tid=%d).\n", tk_get_tid());
+
+	for (i = 0; i < 3; i++) {
+		tk_dly_tsk(2000);
+		P("%d - Delay 2000 msec.\n", 4 + i);
+	}
+
+	P("7 - Wakeup main task.\n");
+
+	/* Wake up calling task */
+	tk_wup_tsk(stacd);
+
+	P("9 - Sub task finished.\n");
+
+	/* Exit and delete myself */
+	tk_exd_tsk();
+}
+
+/*
+ *  Simple task test - main
+ */
+LOCAL	void	test_task( void )
+{
+	ER	er;
+	ID	ttskid;
+	T_CTSK	ctsk;
+	T_RTSK	rtsk;
+
+	P("1 - Task test started.\n");
+
+	/* Create task */
+	memset(&ctsk, 0, sizeof(ctsk));
+
+	ctsk.tskatr = TA_HLNG | TA_RNG0;/* Task attribute		*/
+	ctsk.task = (FP)sub_task;	/* Task startup address		*/
+	ctsk.itskpri = 140;		/* Priority at task startup	*/
+	ctsk.stksz = 1 * 1024;		/* User stack size (byte)	*/
+
+	ttskid = tk_cre_tsk(&ctsk);
+	if ( ttskid < E_OK ) {
+		P("ERROR: tk_cre_tsk [%#x].\n", ttskid);
+		goto err_ret;
+	}
+
+	/* Start task */
+	er = tk_sta_tsk(ttskid, tk_get_tid());
+	if ( er < E_OK ) {
+		tk_del_tsk(ttskid);
+		P("ERROR: tk_sta_tsk [%#x].\n", er);
+		goto err_ret;
+	}
+
+	P("2 - Start sub task (tid=%d) and wait.\n", ttskid);
+
+	/* Wait for wake-up */
+	tk_slp_tsk(TMO_FEVR);
+
+	P("8 - Wakeup from sub task.\n");
+
+	/* Confirm deletion of task */
+	while(1) {
+		er = tk_ref_tsk(ttskid, &rtsk);
+		if ( er == E_NOEXS ) break;
+		tk_slp_tsk(50);
+	}
+	P("10 - Task test finished.\n");
+
+err_ret:
+	return;
+}
+#endif	/* USE_TEST_TASK */
+

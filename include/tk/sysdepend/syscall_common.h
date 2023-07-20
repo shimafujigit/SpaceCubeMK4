@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -66,9 +63,17 @@
 #  include <tk/sysdepend/tef_em1d/cpuattr.h>
 #  include <tk/sysdepend/tef_em1d/cpudef.h>
 #endif
-#if ASP_SH7750R
-#  include <tk/sysdepend/asp_sh7750r/cpuattr.h>
-#  include <tk/sysdepend/asp_sh7750r/cpudef.h>
+#if ASP_SH7254R
+#  include <tk/sysdepend/asp_sh7254r/cpuattr.h>
+#  include <tk/sysdepend/asp_sh7254r/cpudef.h>
+#endif
+#if ASP_RH850P1M
+#  include <tk/sysdepend/asp_rh850p1m/cpuattr.h>
+#  include <tk/sysdepend/asp_rh850p1m/cpudef.h>
+#endif
+#if ASP_LEON5
+#  include <tk/sysdepend/asp_leon5/cpuattr.h>
+#  include <tk/sysdepend/asp_leon5/cpudef.h>
 #endif
 
 #endif /* __TK_SYSCALL_COMMON_H__ */

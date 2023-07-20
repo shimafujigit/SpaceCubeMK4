@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2012/10/24.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/28.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -26,14 +23,19 @@
 #include "sysmgr.h"
 #include "cache_info.h"
 #include <sys/rominfo.h>
+#include <sys/sysinfo.h>
 #include <sys/imalloc.h>
+
+#ifndef	N_SYSM_AREA
+#define	N_SYSM_AREA	1
+#endif
 
 #if	USE_MEM_PROTECT
 #define	PAGESZ	(4 * 1024)
 IMPORT	void	creUserSpace( void *laddr, INT nblk, INT rw );
 IMPORT	void	delUserSpace( void *laddr, INT nblk );
 #else
-#define	PAGESZ	(2 * 1024)
+#define	PAGESZ	(1 * 1024)
 #endif
 
 /*
@@ -117,7 +119,7 @@ typedef struct {
 /*
  * Memory management table
  */
-LOCAL PAGETBL	SysMemTbl;	/* System memory management table */
+LOCAL PAGETBL	SysMemTbl[N_SYSM_AREA]; /* System memory management table */
 #if USE_NOCACHE_MEMTBL
 LOCAL PAGETBL	NoCacheMemTbl;	/* Non-cache area memory management table */
 #endif
@@ -136,8 +138,7 @@ LOCAL FastLock	MemLock = { -1, -1 };
 
 /* ------------------------------------------------------------------------ */
 
-#pragma inline(PageAdr)
-static void* PageAdr( PN pn, PAGETBL *pt )
+Inline void* PageAdr( PN pn, PAGETBL *pt )
 {
 	void* adr = _PageAdr(pn, pt);
 
@@ -151,8 +152,7 @@ static void* PageAdr( PN pn, PAGETBL *pt )
 #endif
 	return adr;
 }
-#pragma inline(PageNo)
-static PN PageNo( CONST void *adr, PAGETBL *pt )
+Inline PN PageNo( CONST void *adr, PAGETBL *pt )
 {
 	adr = CachingAddr(adr);
 	return _PageNo(adr, pt);
@@ -182,8 +182,7 @@ LOCAL BOOL chkadr( CONST void *adr, PAGETBL *pt )
 /*
  * Set page queue value
  */
-#pragma inline(setPageQue)
-static PAGEQUE setPageQue( BOOL u, BOOL c, PN n, PN p, UINT a )
+Inline PAGEQUE setPageQue( BOOL u, BOOL c, PN n, PN p, UINT a )
 {
 	PAGEQUE	q;
 	q.use  = u;
@@ -197,8 +196,7 @@ static PAGEQUE setPageQue( BOOL u, BOOL c, PN n, PN p, UINT a )
 /*
  * Page queue initialization
  */
-#pragma inline(initPageQue)
-static void initPageQue( PN pn, PAGETBL *pt )
+Inline void initPageQue( PN pn, PAGETBL *pt )
 {
 	pt->pageque[pn].next = pt->pageque[pn].prev = pn;
 }
@@ -207,8 +205,7 @@ static void initPageQue( PN pn, PAGETBL *pt )
  * Insert page queue
  *	Inserts ent directly prior to que.
  */
-#pragma inline(insertPageQue)
-static void insertPageQue( PN que, PN ent, PAGETBL *pt )
+Inline void insertPageQue( PN que, PN ent, PAGETBL *pt )
 {
 	PAGEQUE	*qp = &pt->pageque[que];
 	PAGEQUE *ep = &pt->pageque[ent];
@@ -233,14 +230,15 @@ LOCAL void removePageQue( PN ent, PAGETBL *pt )
 	}
 }
 
+#if 0
 /*
  * TRUE if page queue is free
  */
-#pragma inline(isEmptyPageQue)
-static BOOL isEmptyPageQue( PN que, PAGETBL *pt )
+Inline BOOL isEmptyPageQue( PN que, PAGETBL *pt )
 {
 	return ( pt->pageque[que].next == que );
 }
+#endif
 
 /*
  * Free page queue search
@@ -250,12 +248,14 @@ static BOOL isEmptyPageQue( PN que, PAGETBL *pt )
  */
 LOCAL PN searchFreeQue( INT n, PAGETBL *pt )
 {
-	PAGEQUE	*pageque = pt->pageque;
-	PN	pn = 0;
+	PAGEQUE	*pageque;
+	PN	pn;
 
-	while ( (pn = pageque[pn].next) > 0 ) {
-		if ( NumOfPages(&pageque[pn]) >= n ) {
-			return pn;
+	if ( (pageque = pt->pageque) != NULL ) {
+		for ( pn = 0; (pn = pageque[pn].next) > 0; ) {
+			if ( NumOfPages(&pageque[pn]) >= n ) {
+				return pn;
+			}
 		}
 	}
 	return 0;
@@ -292,8 +292,7 @@ LOCAL void appendFreePages( PN pn, INT n, PAGETBL *pt )
 /*
  * Set queue for using page
  */
-#pragma inline(setUsePages)
-static void setUsePages( PN pn, INT n, UINT atr, PAGETBL *pt )
+Inline void setUsePages( PN pn, INT n, UINT atr, PAGETBL *pt )
 {
 	PAGEQUE	*pq = &pt->pageque[pn];
 
@@ -322,6 +321,11 @@ LOCAL void* getPage( INT nblk, UINT atr, PAGETBL *pt )
 
 	/* Free page search */
 	pn = searchFreeQue(nblk, pt);
+#if N_SYSM_AREA == 2
+	if ( pn == 0 && pt == &SysMemTbl[0] ) {
+		pn = searchFreeQue(nblk, ++pt);
+	}
+#endif
 	if ( pn == 0 ) {
 		return NULL;
 	}
@@ -435,6 +439,14 @@ LOCAL ER initPageTbl( void *top, void *end, PAGETBL *pt )
 	top = (void*)(((UINT)top + 7) & ~0x00000007U);
 	memsz = (INT)((UINT)end - (UINT)top);
 
+	if ( memsz < PAGESZ * 2 ) {	/* Too small, initialize as none */
+		pt->maxpage = 0;
+		pt->freepage = 0;
+		pt->pageque = NULL;
+		pt->top_page = NULL;
+		return E_OK;
+	}
+
 	/* Allocate page management table */
 	pt->pageque = (PAGEQUE*)top;
 
@@ -472,9 +484,9 @@ EXPORT void* GetSysMemBlk( INT nblk, UINT attr )
 
 	/* Memory management table */
 #if USE_NOCACHE_MEMTBL
-	pt = ( (attr & TA_NOCACHE) != 0 )? &NoCacheMemTbl: &SysMemTbl;
+	pt = ( (attr & TA_NOCACHE) != 0 )? &NoCacheMemTbl: &SysMemTbl[0];
 #else
-	pt = &SysMemTbl;
+	pt = &SysMemTbl[0];
 #endif
 
 	/* Memory block attributes */
@@ -511,9 +523,12 @@ EXPORT ER RelSysMemBlk( CONST void *addr )
 	INT	free;
 	ER	ercd;
 
-	pt = ( chkadr(addr, &SysMemTbl) )?	&SysMemTbl:
+	pt = ( chkadr(addr, &SysMemTbl[0]) )?	&SysMemTbl[0] :
+#if N_SYSM_AREA == 2
+	     ( chkadr(addr, &SysMemTbl[1]) )?	&SysMemTbl[1] :
+#endif
 #if USE_NOCACHE_MEMTBL
-	     ( chkadr(addr, &NoCacheMemTbl) )?	&NoCacheMemTbl:
+	     ( chkadr(addr, &NoCacheMemTbl) )?	&NoCacheMemTbl :
 #endif
 						NULL;
 	if ( pt == NULL ) {
@@ -548,8 +563,13 @@ EXPORT ER RefSysMemInfo( T_RSMB *pk_rsmb )
 {
 	LockMEM();
 	pk_rsmb->blksz = PAGESZ;
-	pk_rsmb->total = SysMemTbl.maxpage;
-	pk_rsmb->free  = SysMemTbl.freepage;
+#if N_SYSM_AREA == 2
+	pk_rsmb->total = SysMemTbl[0].maxpage + SysMemTbl[1].maxpage;
+	pk_rsmb->free  = SysMemTbl[0].freepage + SysMemTbl[1].freepage;
+#else
+	pk_rsmb->total = SysMemTbl[0].maxpage;
+	pk_rsmb->free  = SysMemTbl[0].freepage;
+#endif
 	UnlockMEM();
 
 	return E_OK;
@@ -563,24 +583,29 @@ EXPORT ER RefSysMemInfo( T_RSMB *pk_rsmb )
  */
 EXPORT ER init_memmgr( void )
 {
-/* Low-level memory management information */
-IMPORT	void	*lowmem_top, *lowmem_limit;
 	void	*memend;
 	ER	ercd;
 
 	/* Acquire system configuration definition information */
 	ercd = _tk_get_cfn(SCTAG_REALMEMEND, (INT*)&memend, 1);
-	if ( ercd < 1 || (UINT)memend > (UINT)lowmem_limit ) {
-		memend = lowmem_limit;
+	if ( ercd < 1 || (UINT)memend > (UINT)SCInfo.ramend ||
+				(UINT)memend < (UINT)SCInfo.ramtop ) {
+		memend = SCInfo.ramend;
 	}
 
 	/* System memory management table initialization */
-	ercd = initPageTbl(lowmem_top, memend, &SysMemTbl);
+	ercd = initPageTbl(SCInfo.ramtop, memend, &SysMemTbl[0]);
 	if ( ercd < E_OK ) {
 		goto err_ret;
 	}
 
-	lowmem_top = memend;  /* Update memory free space */
+#if N_SYSM_AREA == 2
+	/* Extended area memory management table initialization */
+	ercd = initPageTbl(SCInfo.ram2top, SCInfo.ram2end, &SysMemTbl[1]);
+	if ( ercd < E_OK ) {
+		goto err_ret;
+	}
+#endif
 
 #if USE_NOCACHE_MEMTBL
 	/* Non-cache area memory management table initialization */

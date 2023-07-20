@@ -108,7 +108,11 @@ IMPORT const T_CTSK c_init_task;
 /*
  * Entry for starting Kernel
  */
+#if 1
+EXPORT int sysmain( void )
+#else
 EXPORT int main( void )
+#endif
 {
 	DO_DEBUG( tm_monitor(); )
 

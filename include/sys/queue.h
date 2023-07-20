@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -43,7 +40,7 @@ typedef struct queue {
 /*
  * Queue initialization
  */
-#pragma inline(QueInit)
+inline
 static void QueInit( QUEUE *que )
 {
 	que->next = (struct queue *)que;
@@ -53,7 +50,7 @@ static void QueInit( QUEUE *que )
 /*
  * TRUE if the queue is empty
  */
-#pragma inline(isQueEmpty)
+inline
 static BOOL isQueEmpty( QUEUE *que )
 {
 	return ( que->next == que )? TRUE: FALSE;
@@ -63,7 +60,7 @@ static BOOL isQueEmpty( QUEUE *que )
  * Insert in queue
  *	Inserts entry directly prior to que
  */
-#pragma inline(QueInsert)
+inline
 static void QueInsert( QUEUE *entry, QUEUE *que )
 {
 	entry->prev = (struct queue*) que->prev;
@@ -77,7 +74,7 @@ static void QueInsert( QUEUE *entry, QUEUE *que )
  *	Deletes entry from queue
  *	No action is performed if entry is empty.
  */
-#pragma inline(QueRemove)
+inline
 static void QueRemove( QUEUE *entry )
 {
 	if ( entry->next != entry ) {
@@ -92,7 +89,7 @@ static void QueRemove( QUEUE *entry )
  *	and returns the deleted entry.
  *	Returns NULL if que is empty.
  */
-#pragma inline(QueRemoveNext)
+inline
 static QUEUE* QueRemoveNext( QUEUE *que )
 {
 	QUEUE	*entry;

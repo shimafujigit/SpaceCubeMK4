@@ -48,6 +48,7 @@ typedef struct BootInfo {
 #define TMEF_RDAINFO	0x01U	/* ROM disk information */
 #define TMEF_PCIINFO	0x02U	/* PCI device information */
 #define TMEF_DIPSW	0x10U	/* DIPSW state */
+#define	TMEF_LED	0x11U	/* LED contrtol */
 #define TMEF_WROM	0x20U	/* Flash ROM write */
 
 /*

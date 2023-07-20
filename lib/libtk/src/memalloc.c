@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -44,8 +41,7 @@ EXPORT BOOL (*_mem_chkalloc)( void *ptr, int mode, MACB *macb );
 /*
  * Byte size -->  number of pages
  */
-#pragma inline(toPageCount)
-static size_t toPageCount( size_t size, MACB *macb )
+Inline size_t toPageCount( size_t size, MACB *macb )
 {
 	return (size + (macb->pagesz-1)) / macb->pagesz;
 }
@@ -169,8 +165,7 @@ LOCAL void removeAreaQue( QUEUE *aq )
  * Allocate new page capable of allocating a contiguous area at least
  * as big as 'size' byte
  */
-#pragma inline(newPage)
-static QUEUE* newPage( size_t size, MACB *macb )
+Inline QUEUE* newPage( size_t size, MACB *macb )
 {
 	QUEUE	*top, *end;
 	size_t	nblk;
@@ -199,8 +194,7 @@ static QUEUE* newPage( size_t size, MACB *macb )
 /*
  * Fragment and allocate
  */
-#pragma inline(allocate)
-static void* allocate( QUEUE *aq, size_t size, MACB *macb )
+Inline void* allocate( QUEUE *aq, size_t size, MACB *macb )
 {
 	QUEUE	*q;
 

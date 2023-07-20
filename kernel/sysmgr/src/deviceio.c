@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2011/09/08.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -107,7 +104,7 @@ EXPORT ER check_devdesc( ID dd, UINT mode, OpnCB **p_opncb )
 }
 #endif /* USE_FUNC_CHECK_DEVDESC */
 
-#if defined(USE_FUNC_TK_SREA_DEV)||defined(USE_FUNC_TK_SWRI_DEV)||defined(USE_FUNC_TK_WAI_DEV)
+#if defined(USE_FUNC_TK_WAI_DEV)
 /*
  * Verify validity of request ID
  */
@@ -125,7 +122,7 @@ LOCAL ReqCB* check_reqid( ID reqid, OpnCB *opncb )
 
 	return reqcb;
 }
-#endif /* USE_FUNC_TK_SREA_DEV or USE_FUNC_TK_SWRI_DEV or USE_FUNC_TK_WAI_DEV */
+#endif /* USE_FUNC_TK_WAI_DEV */
 
 #if defined(USE_FUNC_TK_OPN_DEV)
 /*
@@ -1368,8 +1365,7 @@ err_ret1:
 /*
  * Device driver abort function call
  */
-#pragma inline(call_abortfn)
-static ER call_abortfn( DevCB *devcb, ID tskid, DEVREQ *devreq, INT nreq )
+Inline ER call_abortfn( DevCB *devcb, ID tskid, DEVREQ *devreq, INT nreq )
 {
 	ABTFN	abortfn;
 

@@ -1,33 +1,29 @@
-;/*
-; *----------------------------------------------------------------------
-; *    T-Kernel 2.0 Software Package
-; *
-; *    Copyright 2011 by Ken Sakamura.
-; *    This software is distributed under the T-License 2.0.
-; *----------------------------------------------------------------------
-; *
-; *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
-; *
-; *----------------------------------------------------------------------
-; *    Changes: Adapted to the ASP-SH7750R Board.
-; *    Changed by UC Technology at 2012/12/20.
-; *    
-; *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
-; *    Copyright (c) 2012 UC Technology. All Rights Reserved.
-; *----------------------------------------------------------------------
-; */
+/*
+ *----------------------------------------------------------------------
+ *    T-Kernel 2.0 Software Package
+ *
+ *    Copyright 2011 by Ken Sakamura.
+ *    This software is distributed under the T-License 2.0.
+ *----------------------------------------------------------------------
+ *
+ *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
+ *
+ *----------------------------------------------------------------------
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
+ *----------------------------------------------------------------------
+ */
 
-;/*
-; *	@(#)asm.h\inc
-; *
-; *	Assembler Macro
-; */
+/*
+ *	@(#)asm.inc
+ *
+ *	Assembler Macro
+ */
 
-	.aifdef __TK_ASM_H__
-	.aelse
-__TK_ASM_H__: .define " "
+#ifndef __TK_ASM_H__
+#define	__TK_ASM_H__	1
 
-	.include "tk/sysdef.inc"
-	.include "tk/sysdepend/asm_common.inc"
+#include "tk/sysdef.inc"
+#include "tk/sysdepend/asm_common.inc"
 
-	.aendi ;/* __TK_ASM_H__ */
+#endif /* __TK_ASM_H__ */

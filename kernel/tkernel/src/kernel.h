@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -38,7 +35,7 @@
  * Kernel configuration file
  */
 #include "config.h"
-#include "../../../config/tk_config_func.h"
+#include "config/tk_config_func.h"
 #include "cpu_conf.h"
 #include "tkdev_conf.h"
 #include "isysconf.h"
@@ -61,12 +58,18 @@ typedef struct objlock {
 	QUEUE		wtskq;		/* Wait task queue */
 } OBJLOCK;
 
-IMPORT void InitOBJLOCK( OBJLOCK *loc );
+Inline void InitOBJLOCK( OBJLOCK *loc )
+{
+	loc->wtskq.next = NULL;
+}
 
 IMPORT void LockOBJ( OBJLOCK* );
 IMPORT void UnlockOBJ( OBJLOCK* );
 
-IMPORT BOOL isLockedOBJ( OBJLOCK *loc );
+Inline BOOL isLockedOBJ( OBJLOCK *loc )
+{
+	return ( loc->wtskq.next != NULL )? TRUE: FALSE;
+}
 
 /*
  * Extended SVC lock
@@ -78,7 +81,10 @@ typedef struct svclock {
 	struct svclock	*locklist;	/* List during lock */
 } SVCLOCK;
 
-IMPORT void InitSVCLOCK( SVCLOCK *loc );
+Inline void InitSVCLOCK( SVCLOCK *loc )
+{
+	loc->wtskq.next = NULL;
+}
 
 IMPORT void LockSVC( SVCLOCK* );
 IMPORT void UnlockSVC( void );
