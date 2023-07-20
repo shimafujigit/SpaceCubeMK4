@@ -10,11 +10,11 @@
  *    Released by T-Engine Forum(http://www.t-engine.org) at 2011/07/29.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the UCT T-Kernel 2.0
- *    Changed by UC Technology at 2013/01/17.
+ *    Changes: Adapted to the UCT T2AS.
+ *    Changed by UC Technology at 2014/03/18.
  *
- *    UCT T-Kernel 2.0 DevKit Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit Version 1.00.00
+ *    Copyright (c) 2014 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -176,7 +176,7 @@
 
 #define USE_FUNC_HLL_INTHDR
 #define USE_FUNC_TK_DEF_INT
-#define USE_FUNC_TK_RET_INT
+/* #define USE_FUNC_TK_RET_INT */
 
 #if defined(NUM_MPLID)
 #define USE_FUNC_TK_CRE_MPL

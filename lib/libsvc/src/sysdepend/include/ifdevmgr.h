@@ -104,34 +104,34 @@ typedef struct {
 
 typedef struct {
 	ID dd;	_align64
+	D start_d;	_align64
 	void *buf;	_align64
 	W size;	_align64
-	D start_d;	_align64
 	TMO_U tmout_u;	_align64
 } DEVICE_TK_REA_DEV_DU_PARA;
 
 typedef struct {
 	ID dd;	_align64
+	D start_d;	_align64
 	void *buf;	_align64
 	W size;	_align64
 	W *asize;	_align64
-	D start_d;	_align64
 } DEVICE_TK_SREA_DEV_D_PARA;
 
 typedef struct {
 	ID dd;	_align64
+	D start_d;	_align64
 	CONST void *buf;	_align64
 	W size;	_align64
-	D start_d;	_align64
 	TMO_U tmout_u;	_align64
 } DEVICE_TK_WRI_DEV_DU_PARA;
 
 typedef struct {
 	ID dd;	_align64
+	D start_d;	_align64
 	CONST void *buf;	_align64
 	W size;	_align64
 	W *asize;	_align64
-	D start_d;	_align64
 } DEVICE_TK_SWRI_DEV_D_PARA;
 
 typedef struct {

@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -56,8 +53,14 @@
 #if TEF_EM1D
 #  include <sys/sysdepend/tef_em1d/str_align_depend.h>
 #endif
-#if ASP_SH7750R
-#  include <sys/sysdepend/asp_sh7750r/str_align_depend.h>
+#if ASP_SH7254R
+#  include <sys/sysdepend/asp_sh7254r/str_align_depend.h>
+#endif
+#if ASP_RH850P1M
+#  include <sys/sysdepend/asp_rh850p1m/str_align_depend.h>
+#endif
+#if ASP_LEON5
+#  include <sys/sysdepend/asp_leon5/str_align_depend.h>
 #endif
 
 #endif /* __SYS_STR_ALIGN_COMMON_H__ */

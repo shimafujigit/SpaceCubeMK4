@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -52,7 +49,11 @@ IMPORT void wait_release_tmout( TCB *tcb );
  *	Remove the task from the timer queue and the wait queue.
  *	Do not update the task state.
  */
-IMPORT void wait_cancel( TCB *tcb );
+Inline void wait_cancel( TCB *tcb )
+{
+	timer_delete(&tcb->wtmeb);
+	QueRemove(&tcb->tskque);
+}
 
 /*
  * Change the active task to wait state and connect to the
@@ -77,7 +78,25 @@ IMPORT ID wait_tskid( QUEUE *wait_queue );
 /*
  * Connect the task to the prioritized wait queue.
  */
-IMPORT void queue_insert_tpri( TCB *tcb, QUEUE *queue );
+Inline void queue_insert_tpri( TCB *tcb, QUEUE *queue )
+{
+	QUEUE *q;
+	QUEUE *start, *end;
+	UB val;
+	W offset;
+
+	start = end = queue;
+	val = tcb->priority;
+	offset = offsetof(TCB,priority);
+
+	for ( q = start->next; q != end; q = q->next ) {
+		if ( *(UB*)((VB*)q + offset) > val ) {
+			break;
+		}
+	}
+
+	QueInsert(&tcb->tskque, q);
+}
 
 /*
  * Common part of control block
@@ -108,7 +127,11 @@ IMPORT void gcb_make_wait( GCB *gcb, TMO_U tmout );
 /*
  * Check wait disable
  */
-IMPORT BOOL is_diswai( GCB *gcb, TCB *tcb, UINT tskwait );
+Inline BOOL is_diswai( GCB *gcb, TCB *tcb, UINT tskwait )
+{
+	return ( (tcb->waitmask & tskwait) != 0
+	      && (gcb->objatr & TA_NODISWAI) == 0 );
+}
 
 /*
  * gcb_make_wait with wait disable check function.

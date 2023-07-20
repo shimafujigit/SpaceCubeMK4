@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -32,8 +29,7 @@
  * connect to the ready queue.
  * Call when the task is in the wait state (including double wait).
  */
-#pragma inline(make_non_wait)
-static void make_non_wait( TCB *tcb )
+Inline void make_non_wait( TCB *tcb )
 {
 	if ( tcb->state == TS_WAIT ) {
 		make_ready(tcb);
@@ -47,8 +43,7 @@ static void make_non_wait( TCB *tcb )
 /*
  * Release wait state of the task.
  */
-#pragma inline(wait_release)
-static void wait_release( TCB *tcb )
+Inline void wait_release( TCB *tcb )
 {
 	timer_delete(&tcb->wtmeb);
 	QueRemove(&tcb->tskque);
@@ -241,50 +236,3 @@ EXPORT TCB* gcb_top_of_wait_queue( GCB *gcb, TCB *tcb )
 	return ( tcb->priority < q->priority )? tcb: q;
 }
 #endif /* USE_FUNC_GCB_TOP_OF_WAIT_QUEUE */
-
-
-/*
- * Cancel task wait state.
- *	Remove the task from the timer queue and the wait queue.
- *	Do not update the task state.
- */
-#pragma inline(wait_cancel)
-static void wait_cancel( TCB *tcb )
-{
-	timer_delete(&tcb->wtmeb);
-	QueRemove(&tcb->tskque);
-}
-
-/*
- * Connect the task to the prioritized wait queue.
- */
-#pragma inline(queue_insert_tpri)
-static void queue_insert_tpri( TCB *tcb, QUEUE *queue )
-{
-	QUEUE *q;
-	QUEUE *start, *end;
-	UB val;
-	W offset;
-
-	start = end = queue;
-	val = tcb->priority;
-	offset = offsetof(TCB,priority);
-
-	for ( q = start->next; q != end; q = q->next ) {
-		if ( *(UB*)((VB*)q + offset) > val ) {
-			break;
-		}
-	}
-
-	QueInsert(&tcb->tskque, q);
-}
-
-/*
- * Check wait disable
- */
-#pragma inline(is_diswai)
-static BOOL is_diswai( GCB *gcb, TCB *tcb, UINT tskwait )
-{
-	return ( (tcb->waitmask & tskwait) != 0
-	      && (gcb->objatr & TA_NODISWAI) == 0 );
-}

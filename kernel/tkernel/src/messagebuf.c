@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2012/10/24.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -116,8 +113,7 @@ typedef INT		HEADER;
  * Check message buffer free space
  *	If 'msgsz' message is able to be stored, return TRUE.
  */
-#pragma inline(mbf_free)
-static BOOL mbf_free( MBFCB *mbfcb, INT msgsz )
+Inline BOOL mbf_free( MBFCB *mbfcb, INT msgsz )
 {
 	return ( HEADERSZ + (UINT)msgsz <= (UINT)mbfcb->frbufsz );
 }
@@ -125,8 +121,7 @@ static BOOL mbf_free( MBFCB *mbfcb, INT msgsz )
 /*
  * If message buffer is empty, return TRUE.
  */
-#pragma inline(mbf_empty)
-static BOOL mbf_empty( MBFCB *mbfcb )
+Inline BOOL mbf_empty( MBFCB *mbfcb )
 {
 	return ( mbfcb->frbufsz == mbfcb->bufsz );
 }

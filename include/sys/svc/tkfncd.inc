@@ -1,158 +1,23 @@
-;/*
-; *----------------------------------------------------------------------
-; *    T-Kernel 2.0 Software Package
-; *
-; *    Copyright 2011 by Ken Sakamura.
-; *    This software is distributed under the T-License 2.0.
-; *----------------------------------------------------------------------
-; *
-; *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
-; *
-; *----------------------------------------------------------------------
-; *    Changes: Adapted to the ASP-SH7750R Board.
-; *    Changed by UC Technology at 2012/12/25.
-; *    
-; *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
-; *    Copyright (c) 2012 UC Technology. All Rights Reserved.
-; *----------------------------------------------------------------------
-; */
+/*
+ *----------------------------------------------------------------------
+ *    T-Kernel 2.0 Software Package
+ *
+ *    Copyright 2011 by Ken Sakamura.
+ *    This software is distributed under the T-License 2.0.
+ *----------------------------------------------------------------------
+ *
+ *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
+ *
+ *----------------------------------------------------------------------
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
+ *----------------------------------------------------------------------
+ */
 
-;/*
-; *	T-Kernel function code [HEW]
-; *
-; *	   created from syscall.h
-; */
+/*
+ *	T-Kernel function code
+ *
+ *	   created from syscall.h
+ */
 
-TFN_CRE_TSK:	.define	"H'80010100"
-TFN_DEL_TSK:	.define	"H'80020100"
-TFN_STA_TSK:	.define	"H'80030200"
-TFN_EXT_TSK:	.define	"H'80040000"
-TFN_EXD_TSK:	.define	"H'80050000"
-TFN_TER_TSK:	.define	"H'80060100"
-TFN_DIS_DSP:	.define	"H'80070000"
-TFN_ENA_DSP:	.define	"H'80080000"
-TFN_CHG_PRI:	.define	"H'80090200"
-TFN_CHG_SLT:	.define	"H'800a0200"
-TFN_ROT_RDQ:	.define	"H'800b0100"
-TFN_REL_WAI:	.define	"H'800c0100"
-TFN_GET_TID:	.define	"H'800d0000"
-TFN_GET_TSP:	.define	"H'800e0200"
-TFN_SET_TSP:	.define	"H'800f0200"
-TFN_GET_RID:	.define	"H'80100100"
-TFN_SET_RID:	.define	"H'80110200"
-TFN_GET_REG:	.define	"H'80120400"
-TFN_SET_REG:	.define	"H'80130400"
-TFN_GET_CPR:	.define	"H'80140300"
-TFN_SET_CPR:	.define	"H'80150300"
-TFN_INF_TSK:	.define	"H'80160300"
-TFN_REF_TSK:	.define	"H'80170200"
-TFN_DEF_TEX:	.define	"H'80180200"
-TFN_ENA_TEX:	.define	"H'80190200"
-TFN_DIS_TEX:	.define	"H'801a0200"
-TFN_RAS_TEX:	.define	"H'801b0200"
-TFN_END_TEX:	.define	"H'801c0100"
-TFN_REF_TEX:	.define	"H'801d0200"
-TFN_SUS_TSK:	.define	"H'801e0100"
-TFN_RSM_TSK:	.define	"H'801f0100"
-TFN_FRSM_TSK:	.define	"H'80200100"
-TFN_SLP_TSK:	.define	"H'80210100"
-TFN_WUP_TSK:	.define	"H'80220100"
-TFN_CAN_WUP:	.define	"H'80230100"
-TFN_SIG_TEV:	.define	"H'80240200"
-TFN_WAI_TEV:	.define	"H'80250200"
-TFN_DIS_WAI:	.define	"H'80260200"
-TFN_ENA_WAI:	.define	"H'80270100"
-TFN_CRE_SEM:	.define	"H'80280100"
-TFN_DEL_SEM:	.define	"H'80290100"
-TFN_SIG_SEM:	.define	"H'802a0200"
-TFN_WAI_SEM:	.define	"H'802b0300"
-TFN_REF_SEM:	.define	"H'802c0200"
-TFN_CRE_MTX:	.define	"H'802d0100"
-TFN_DEL_MTX:	.define	"H'802e0100"
-TFN_LOC_MTX:	.define	"H'802f0200"
-TFN_UNL_MTX:	.define	"H'80300100"
-TFN_REF_MTX:	.define	"H'80310200"
-TFN_CRE_FLG:	.define	"H'80320100"
-TFN_DEL_FLG:	.define	"H'80330100"
-TFN_SET_FLG:	.define	"H'80340200"
-TFN_CLR_FLG:	.define	"H'80350200"
-TFN_WAI_FLG:	.define	"H'80361400"
-TFN_REF_FLG:	.define	"H'80370200"
-TFN_CRE_MBX:	.define	"H'80380100"
-TFN_DEL_MBX:	.define	"H'80390100"
-TFN_SND_MBX:	.define	"H'803a0200"
-TFN_RCV_MBX:	.define	"H'803b0300"
-TFN_REF_MBX:	.define	"H'803c0200"
-TFN_CRE_MBF:	.define	"H'803d0100"
-TFN_DEL_MBF:	.define	"H'803e0100"
-TFN_SND_MBF:	.define	"H'803f0400"
-TFN_RCV_MBF:	.define	"H'80400300"
-TFN_REF_MBF:	.define	"H'80410200"
-TFN_CRE_POR:	.define	"H'80420100"
-TFN_DEL_POR:	.define	"H'80430100"
-TFN_CAL_POR:	.define	"H'80441400"
-TFN_ACP_POR:	.define	"H'80451400"
-TFN_FWD_POR:	.define	"H'80461400"
-TFN_RPL_RDV:	.define	"H'80470300"
-TFN_REF_POR:	.define	"H'80480200"
-TFN_DEF_INT:	.define	"H'80490200"
-TFN_RET_INT:	.define	"H'804a0000"
-TFN_CRE_MPL:	.define	"H'804b0100"
-TFN_DEL_MPL:	.define	"H'804c0100"
-TFN_GET_MPL:	.define	"H'804d0400"
-TFN_REL_MPL:	.define	"H'804e0200"
-TFN_REF_MPL:	.define	"H'804f0200"
-TFN_CRE_MPF:	.define	"H'80500100"
-TFN_DEL_MPF:	.define	"H'80510100"
-TFN_GET_MPF:	.define	"H'80520300"
-TFN_REL_MPF:	.define	"H'80530200"
-TFN_REF_MPF:	.define	"H'80540200"
-TFN_SET_TIM:	.define	"H'80550100"
-TFN_GET_TIM:	.define	"H'80560100"
-TFN_GET_OTM:	.define	"H'80570100"
-TFN_DLY_TSK:	.define	"H'80580100"
-TFN_CRE_CYC:	.define	"H'80590100"
-TFN_DEL_CYC:	.define	"H'805a0100"
-TFN_STA_CYC:	.define	"H'805b0100"
-TFN_STP_CYC:	.define	"H'805c0100"
-TFN_REF_CYC:	.define	"H'805d0200"
-TFN_CRE_ALM:	.define	"H'805e0100"
-TFN_DEL_ALM:	.define	"H'805f0100"
-TFN_STA_ALM:	.define	"H'80600200"
-TFN_STP_ALM:	.define	"H'80610100"
-TFN_REF_ALM:	.define	"H'80620200"
-TFN_REF_VER:	.define	"H'80630100"
-TFN_REF_SYS:	.define	"H'80640100"
-TFN_DEF_SSY:	.define	"H'80650200"
-TFN_STA_SSY:	.define	"H'80660300"
-TFN_CLN_SSY:	.define	"H'80670300"
-TFN_EVT_SSY:	.define	"H'80680400"
-TFN_REF_SSY:	.define	"H'80690200"
-TFN_CRE_RES:	.define	"H'806a0000"
-TFN_DEL_RES:	.define	"H'806b0100"
-TFN_GET_RES:	.define	"H'806c0300"
-TFN_SET_POW:	.define	"H'806d0100"
-TFN_CHG_SLT_U:	.define	"H'806e2100"
-TFN_INF_TSK_U:	.define	"H'806f0300"
-TFN_REF_TSK_U:	.define	"H'80700200"
-TFN_SLP_TSK_U:	.define	"H'80712000"
-TFN_WAI_TEV_U:	.define	"H'80722100"
-TFN_DLY_TSK_U:	.define	"H'80732000"
-TFN_WAI_SEM_U:	.define	"H'80742200"
-TFN_WAI_FLG_U:	.define	"H'80752400"
-TFN_RCV_MBX_U:	.define	"H'80762200"
-TFN_LOC_MTX_U:	.define	"H'80772100"
-TFN_SND_MBF_U:	.define	"H'80782300"
-TFN_RCV_MBF_U:	.define	"H'80792200"
-TFN_CAL_POR_U:	.define	"H'807a2400"
-TFN_ACP_POR_U:	.define	"H'807b2400"
-TFN_GET_MPL_U:	.define	"H'807c2300"
-TFN_GET_MPF_U:	.define	"H'807d2200"
-TFN_SET_TIM_U:	.define	"H'807e2000"
-TFN_GET_TIM_U:	.define	"H'807f0200"
-TFN_GET_OTM_U:	.define	"H'80800200"
-TFN_CRE_CYC_U:	.define	"H'80810100"
-TFN_REF_CYC_U:	.define	"H'80820200"
-TFN_STA_ALM_U:	.define	"H'80832100"
-TFN_REF_ALM_U:	.define	"H'80840200"
-
+#include "tkfncd.h"

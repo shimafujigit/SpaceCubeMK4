@@ -36,7 +36,7 @@ EXPORT void LockOBJ( OBJLOCK *loc )
 			/* Lock */
 			QueInit(&loc->wtskq);
 
-			ctxtsk->klocked = klocked = TRUE;
+			klocked = ctxtsk->klocked = TRUE;
 			ready_queue.klocktsk = ctxtsk;
 		} else {
 			/* Ready for lock */

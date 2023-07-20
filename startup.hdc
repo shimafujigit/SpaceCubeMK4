@@ -1,6 +1,0 @@
-#Macro for ASP-SH7750R StartUp -Start
-memory_edit ff80001c long n
-b777110
-.
-register_set PC 0x84000000
-#Macro -End

@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -599,7 +596,7 @@ EXPORT ER svc_ientry P2GP( void *pk_para, FN fncd )
 			return E_DISWAI; /* Disable extended SVC call */
 		}
 
-		DISABLE_INTERRUPT;
+		BEGIN_DISABLE_INTERRUPT;
 		save_execssid = ctxtsk->execssid;
 		save_waitmask = ctxtsk->waitmask;
 		save_exectex  = ctxtsk->exectex;
@@ -612,7 +609,7 @@ EXPORT ER svc_ientry P2GP( void *pk_para, FN fncd )
 			ctxtsk->exectex = 0;
 		}
 		ctxtsk->sysmode++;
-		ENABLE_INTERRUPT;
+		END_DISABLE_INTERRUPT;
 
 		UnlockSVC();
 
@@ -623,12 +620,12 @@ EXPORT ER svc_ientry P2GP( void *pk_para, FN fncd )
 		/* Lock in order to run with break function exclusively */
 		LockSVC(&ctxtsk->svclock);
 
-		DISABLE_INTERRUPT;
+		BEGIN_DISABLE_INTERRUPT;
 		ctxtsk->sysmode--;
 		ctxtsk->execssid = save_execssid;
 		ctxtsk->waitmask = save_waitmask;
 		ctxtsk->exectex |= save_exectex;
-		ENABLE_INTERRUPT;
+		END_DISABLE_INTERRUPT;
 
 		UnlockSVC();
 

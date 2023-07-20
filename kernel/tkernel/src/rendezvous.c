@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2012/10/24.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -97,8 +94,7 @@ EXPORT ER rendezvous_initialize( void )
 /*
  * Create rendezvous number
  */
-#pragma inline(gen_rdvno)
-static RNO gen_rdvno( TCB *tcb )
+Inline RNO gen_rdvno( TCB *tcb )
 {
 	RNO	rdvno;
 
@@ -113,8 +109,7 @@ static RNO gen_rdvno( TCB *tcb )
 /*
  * Get task ID from rendezvous number
  */
-#pragma inline(get_tskid_rdvno)
-static ID get_tskid_rdvno( RNO rdvno )
+Inline ID get_tskid_rdvno( RNO rdvno )
 {
 	return (ID)((UINT)rdvno & ((1 << RDVNO_SHIFT) - 1));
 }

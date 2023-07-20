@@ -9,6 +9,9 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -23,6 +26,7 @@
 
 #include <basic.h>
 #include <tk/tkernel.h>
+#include <libstr.h>
 
 /*** macros ***/
 /* text evaluation and conversion macro */
@@ -32,6 +36,7 @@
         ( ((c) == ' ') || ((c) == '\t') )
 
 /*** binary operation ***/
+#if 0	/* not use (use a BCC standard library) */
 /* memset : fill memory area */
 void*
 memset( void *s, int c, size_t n )
@@ -129,6 +134,7 @@ memmove( void *dst, const void *src, size_t n )
 
 	return dst;
 }
+#endif	/* not use (use a BCC standard library) */
 
 /* bzero : zero clear memory area */
 void
@@ -138,6 +144,7 @@ bzero( void *s, size_t n )
 }
 
 /*** text string operation ***/
+#if 0	/* not use (use a BCC standard library) */
 /* strlen : get text string length */
 size_t
 strlen( const char *s )
@@ -341,3 +348,4 @@ PARSE_END:
 	}
 	return value * sign;
 }
+#endif	/* not use (use a BCC standard library) */

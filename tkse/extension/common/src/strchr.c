@@ -31,3 +31,4 @@ char* strchr(const char *str, int ch)
 	}
 	return (char*)p;
 }
+

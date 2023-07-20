@@ -9,11 +9,8 @@
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -56,8 +53,14 @@
 #ifdef _TEF_EM1D_
 #  include <sys/sysdepend/tef_em1d/machine_depend.h>
 #endif
-#ifdef _ASP_SH7750R_
-#  include <sys/sysdepend/asp_sh7750r/machine_depend.h>
+#ifdef _ASP_SH7254R_
+#  include <sys/sysdepend/asp_sh7254r/machine_depend.h>
+#endif
+#ifdef _ASP_RH850P1M_
+#  include <sys/sysdepend/asp_rh850p1m/machine_depend.h>
+#endif
+#ifdef _ASP_LEON5_
+#  include <sys/sysdepend/asp_leon5/machine_depend.h>
 #endif
 
 #endif /* __SYS_MACHINE_COMMON_H__ */

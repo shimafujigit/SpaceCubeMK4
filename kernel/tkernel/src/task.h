@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2012/10/24.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2012/12/20.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 1.00.00
- *    Copyright (c) 2012 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -59,7 +56,10 @@ typedef enum {
 /*
  * If the task is alive ( except NON-EXISTENT,DORMANT ), return TRUE.
  */
-IMPORT BOOL task_alive( TSTAT state );
+Inline BOOL task_alive( TSTAT state )
+{
+	return ( (state & (TS_READY|TS_WAIT|TS_SUSPEND)) != 0 );
+}
 
 /*
  * Task priority internal/external expression conversion macro

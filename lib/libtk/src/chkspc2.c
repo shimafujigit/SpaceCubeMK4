@@ -30,7 +30,7 @@
 /*
  * Kernel configuration file
  */
-#include "../../../../../config/tk_config_func.h"
+#include "config/tk_config_func.h"
 
 #if VIRTUAL_ADDRESS
 

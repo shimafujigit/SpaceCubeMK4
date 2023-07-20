@@ -77,7 +77,9 @@ LOCAL ER svc_syslog_wait( void )
  */
 EXPORT ER __syslog_send( const char *string, int len )
 {
+#if USE_SYSLOG_CONSIO
 	ER	ercd;
+#endif
 
 	if ( string == NULL ) {
 		return svc_syslog_wait();

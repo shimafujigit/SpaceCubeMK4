@@ -76,7 +76,7 @@
 /* Rendezvous configuration */
 #define MIN_PORID	(1)
 #define MAX_PORID	(max_porid)
-//#define NUM_PORID	(MAX_PORID)
+#define NUM_PORID	(MAX_PORID)
 #define CHK_PORID(id)	((MIN_PORID) <= (id) && (id) <= (MAX_PORID))
 #define INDEX_POR(id)	((id)-(MIN_PORID))
 #define ID_POR(index)	((index)+(MIN_PORID))
@@ -84,7 +84,7 @@
 /* Memory pool configuration */
 #define MIN_MPLID	(1)
 #define MAX_MPLID	(max_mplid)
-//#define NUM_MPLID	(MAX_MPLID)
+#define NUM_MPLID	(MAX_MPLID)
 #define CHK_MPLID(id)	((MIN_MPLID) <= (id) && (id) <= (MAX_MPLID))
 #define INDEX_MPL(id)	((id)-(MIN_MPLID))
 #define ID_MPL(index)	((index)+(MIN_MPLID))
@@ -108,7 +108,7 @@
 /* Alarm handler configuration */
 #define MIN_ALMID	(1)
 #define MAX_ALMID	(max_almid)
-//#define NUM_ALMID	(MAX_ALMID)
+#define NUM_ALMID	(MAX_ALMID)
 #define CHK_ALMID(id)	((MIN_ALMID) <= (id) && (id) <= (MAX_ALMID))
 #define INDEX_ALM(id)	((id)-(MIN_ALMID))
 #define ID_ALM(index)	((index)+(MIN_ALMID))
@@ -162,7 +162,7 @@
  *   0: Invalid
  *   1: Valid
  */
-#define USE_DBGSPT		(0)
+#define USE_DBGSPT		(1)
 
 /* Use object name (Add object name to each control block) */
 #define USE_OBJECT_NAME		(1)	/* 0: Do not use object name */

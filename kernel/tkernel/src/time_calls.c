@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2012/10/24.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -276,8 +273,7 @@ EXPORT ER cyclichandler_initialize( void )
 /*
  * Next startup time
  */
-#pragma inline(cyc_next_time)
-static LSYSTIM cyc_next_time( CYCCB *cyccb )
+Inline LSYSTIM cyc_next_time( CYCCB *cyccb )
 {
 	LSYSTIM		tm;
 	longlong	n;
@@ -304,8 +300,7 @@ LOCAL void call_cychdr( CYCCB* cyccb );
 /*
  * Register timer event queue
  */
-#pragma inline(cyc_timer_insert)
-static void cyc_timer_insert( CYCCB *cyccb, LSYSTIM tm )
+Inline void cyc_timer_insert( CYCCB *cyccb, LSYSTIM tm )
 {
 	timer_insert_abs(&cyccb->cyctmeb, tm, (CBACK)call_cychdr, cyccb);
 }
@@ -839,8 +834,7 @@ LOCAL void immediate_call_almhdr( ALMCB *almcb )
 /*
  * Register onto timer event queue
  */
-#pragma inline(alm_timer_insert)
-static void alm_timer_insert( ALMCB *almcb, RELTIM_U reltim )
+Inline void alm_timer_insert( ALMCB *almcb, RELTIM_U reltim )
 {
 	LSYSTIM	tm;
 

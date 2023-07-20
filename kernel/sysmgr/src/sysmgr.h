@@ -34,7 +34,7 @@
 #include <sys/debug.h>
 
 #define NUM_OPNDEV	(MaxOpnDev)
-#include "../../../config/tk_config_func.h"
+#include "config/tk_config_func.h"
 
 /* ------------------------------------------------------------------------ */
 /*

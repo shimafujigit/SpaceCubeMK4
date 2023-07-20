@@ -10,11 +10,8 @@
  *    Modified by T-Engine Forum at 2012/10/24.
  *
  *----------------------------------------------------------------------
- *    Changes: Adapted to the ASP-SH7750R Board.
- *    Changed by UC Technology at 2013/01/29.
- *    
- *    UCT T-Kernel 2.0 DevKit tuned for SH7750R Version 2.00.01
- *    Copyright (c) 2013 UC Technology. All Rights Reserved.
+ *    UCT T2AS DevKit tuned for LEON5 Version 1.00.00
+ *    Copyright (c) 2021 UC Technology. All Rights Reserved.
  *----------------------------------------------------------------------
  */
 
@@ -92,8 +89,7 @@ EXPORT ER eventflag_initialize( void )
 /*
  * Check for event flag wait release condition
  */
-#pragma inline(eventflag_cond)
-static BOOL eventflag_cond( FLGCB *flgcb, UINT waiptn, UINT wfmode )
+Inline BOOL eventflag_cond( FLGCB *flgcb, UINT waiptn, UINT wfmode )
 {
 	if ( (wfmode & TWF_ORW) != 0 ) {
 		return ( (flgcb->flgptn & waiptn) != 0 );
