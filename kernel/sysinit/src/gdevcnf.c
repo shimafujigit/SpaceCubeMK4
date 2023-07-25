@@ -67,7 +67,7 @@ EXPORT	W	GetDevConf(UB *name, W *val)
 
 	if ( (p = SearchDevConf(name)) != NULL ) {
 		for ( ; (p = SkipNext(p)) && cnt < L_DEVCONF_VAL; cnt++) {
-			*val++ = (W)strtol((char*)p, (char**)&p, 0);
+			*val++ = (W)strtoul((char*)p, (char**)&p, 0);
 		}
 	}
 	return cnt;

@@ -1,0 +1,148 @@
+#
+# ----------------------------------------------------------------------
+#    T2EX Software Package
+#
+#    Copyright 2012 by Ken Sakamura.
+#    This software is distributed under the T-License 2.0.
+# ----------------------------------------------------------------------
+#
+#    Released by T-Engine Forum(http://www.t-engine.org/) at 2012/12/12.
+#
+# ----------------------------------------------------------------------
+#
+
+#
+# This software package is available for use, modification, 
+# and redistribution in accordance with the terms of the attached 
+# T-License 2.0.
+# If you want to redistribute the source code, you need to attach 
+# the T-License 2.0 document.
+# There's no obligation to publish the content, and no obligation 
+# to disclose it to the T-Engine Forum if you have modified the 
+# software package.
+# You can also distribute the modified source code. In this case, 
+# please register the modification to T-Kernel traceability service.
+# People can know the history of modifications by the service, 
+# and can be sure that the version you have inherited some 
+# modification of a particular version or not.
+#
+#    http://trace.t-engine.org/tk/?lang=en
+#    http://trace.t-engine.org/tk/?lang=ja
+#
+# As per the provisions of the T-License 2.0, T-Engine Forum 
+# ensures that the the portion of the software that is copyrighted 
+# by Ken Sakamura or the T-Engine Forum does not infringe the 
+# copyrights of a third party.
+# However, it does not make any warranty other than this.
+# DISCLAIMER: T-Engine Forum and Ken Sakamura shall not be held
+# responsible for any consequences or damages caused directly or
+# indirectly by the use of this software package.
+#
+# Materials copyrighted by third parties are included in the 
+# software package. Please use them according to the individual 
+# copyright notice and license for these parts.
+#
+
+#
+#	@(#)Makefile.src_bsd
+#
+#
+
+VPATH += \
+	$(S_BSD)/net \
+	$(S_BSD)/compat/common \
+	$(S_BSD)/netinet \
+	$(S_BSD)/net80211 \
+	$(S_BSD)/lib/libkern \
+	$(S_BSD)/kern \
+	$(S_BSD)/rump
+
+SRC_BSD += \
+	if.c \
+	if_ethersubr.c \
+	if_loop.c \
+	if_media.c \
+	radix.c \
+	route.c \
+	rtsock.c \
+	link_proto.c \
+
+SRC_BSD += \
+	in.c \
+	in4_cksum.c \
+	in_cksum.c \
+	in_pcb.c \
+	if_arp.c \
+	in_proto.c \
+	in_offload.c \
+	ip_input.c \
+	ip_output.c \
+	ip_icmp.c \
+	igmp.c \
+	ip_flow.c \
+	raw_ip.c \
+	raw_usrreq.c \
+	raw_cb.c \
+	tcp_debug.c \
+	tcp_subr.c \
+	tcp_timer.c \
+	tcp_usrreq.c \
+	udp_usrreq.c \
+	tcp_input.c \
+	tcp_output.c \
+	tcp_congctl.c \
+	tcp_sack.c \
+	ip_encap.c \
+	cpu_in_cksum.c \
+
+SRC_BSD += \
+	kern_descrip.c \
+	kern_rate.c \
+	kern_softint.c \
+	kern_stub.c \
+	kern_synch.c \
+	kern_timeout.c \
+	kern_uidinfo.c \
+	subr_evcnt.c \
+	subr_hash.c \
+	subr_pool.c \
+	subr_prf2.c \
+	subr_time.c \
+	sys_descrip.c \
+	sys_generic.c \
+	sys_select.c \
+	sys_socket.c \
+	uipc_domain.c \
+	uipc_mbuf.c \
+	uipc_mbuf2.c \
+	uipc_socket.c \
+	uipc_socket2.c \
+	uipc_syscalls.c \
+
+SRC_BSD += \
+	uipc_syscalls_40.c \
+	uipc_syscalls_43.c \
+
+SRC_BSD += \
+	sleepq.c \
+	percpu.c \
+
+SRC_BSD += \
+	copy.c \
+	random.c \
+	arc4random.c \
+	intoa.c \
+	__cmsg_alignbytes.c \
+	__assert.c \
+	bswap16.c \
+	bswap32.c \
+
+ifdef TKN_ACCEPT_FILTER
+  SRC_BSD += uipc_accf.c 
+endif
+ifdef BPFILTER
+  SRC_BSD += bpf_filter.c bpf.c
+endif
+ifdef TUNDEVS
+  SRC_BSD += if_tun.c
+endif

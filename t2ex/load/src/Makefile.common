@@ -1,0 +1,144 @@
+#
+# ----------------------------------------------------------------------
+#    T2EX Software Package
+#
+#    Copyright 2012 by Ken Sakamura.
+#    This software is distributed under the T-License 2.0.
+# ----------------------------------------------------------------------
+#
+#    Released by T-Engine Forum(http://www.t-engine.org/) at 2012/12/12.
+#
+# ----------------------------------------------------------------------
+#
+
+#
+# This software package is available for use, modification, 
+# and redistribution in accordance with the terms of the attached 
+# T-License 2.0.
+# If you want to redistribute the source code, you need to attach 
+# the T-License 2.0 document.
+# There's no obligation to publish the content, and no obligation 
+# to disclose it to the T-Engine Forum if you have modified the 
+# software package.
+# You can also distribute the modified source code. In this case, 
+# please register the modification to T-Kernel traceability service.
+# People can know the history of modifications by the service, 
+# and can be sure that the version you have inherited some 
+# modification of a particular version or not.
+#
+#    http://trace.t-engine.org/tk/?lang=en
+#    http://trace.t-engine.org/tk/?lang=ja
+#
+# As per the provisions of the T-License 2.0, T-Engine Forum 
+# ensures that the the portion of the software that is copyrighted 
+# by Ken Sakamura or the T-Engine Forum does not infringe the 
+# copyrights of a third party.
+# However, it does not make any warranty other than this.
+# DISCLAIMER: T-Engine Forum and Ken Sakamura shall not be held
+# responsible for any consequences or damages caused directly or
+# indirectly by the use of this software package.
+#
+# Materials copyrighted by third parties are included in the 
+# software package. Please use them according to the individual 
+# copyright notice and license for these parts.
+#
+
+#
+#	@(#)Makefile.common
+#
+#
+
+#	T2EX: program load functions & libraries (libload.a)
+#
+#	1. make source
+#	2. make
+#	3. make install
+
+# source file dependencies (generated automatically)
+DEPS = Dependencies
+DEPENDENCIES_OUTPUT := $(DEPS)
+
+# ----------------------------------------------------------------------------
+
+# target object
+TARGET_OBJ = load.o
+TARGET_LIB = libload.a
+
+# source file path
+S	= ../../src
+IFSRC	= ../../svc/$(MACHINE)
+
+VPATH 	= $(S) $(IFSRC) $(S)/sysdepend/$(MACHINE)
+HEADER := $(S) $(IFSRC) $(BD)/include/t2ex $(HEADER)
+
+# needed for pagedef.h
+HEADER	+= $(BD)/kernel/extension/memory/t2ex/sysdepend/$(MACHINE)
+
+# auto generation header/source files
+IFLIB	= t2ex/load.h
+
+# service source files (platform independent)
+MGRSRC	+= service.c pminfo.c progload.c ldr_elf.c src_file.c src_mem.c
+
+# service source files (platform specific)
+MGRSRC	+= startup.S
+
+# library source files
+LIBSRC	+= $(wildcard $(IFSRC)/*.S)
+
+# object files
+MGROBJ	= $(addsuffix .o, $(basename $(MGRSRC)))
+LIBOBJ	= $(addsuffix .o, $(basename $(notdir $(LIBSRC))))
+
+# compiler options
+CFLAGS += $(CFLAGS_WARNING)
+
+CPPFLAGS += -DTKERNEL_CHECK_CONST
+
+# T2EX object module install directory
+T2EX_INSTALLDIR = $(BD)/t2ex/build/$(TETYPE)_$(MACHINE)
+
+# ----------------------------------------------------------------------------
+
+.PHONY: all clean source clean_source install
+
+ALL = $(TARGET_OBJ) $(TARGET_LIB)
+
+all:	$(ALL)
+
+clean:
+	$(RM) $(MGROBJ) $(LIBOBJ) $(ALL) $(DEPS)
+
+install: $(addprefix $(T2EX_INSTALLDIR)/, $(TARGET_OBJ)) \
+	$(addprefix $(LIB_INSTALLDIR)/, $(TARGET_LIB))
+
+source:
+	( cd $(IFSRC) ; \
+	for if_src in $(IFLIB) ; do \
+	  $(BD)/t2ex/etc/mkt2exsvc $(MACHINE) $(BD)/include/t2ex/$$if_src ;\
+	done );
+
+clean_source:
+	( cd $(IFSRC) ; $(RM) *.h )
+	( cd $(IFSRC) ; $(RM) *.S )
+
+$(TARGET_OBJ): $(MGROBJ)
+	$(LINK_R.o) $^ $(OUTPUT_OPTION)
+
+$(TARGET_LIB): $(LIBOBJ)
+	$(AR) $(ARFLAGS) $@ $?
+  ifdef RANLIB
+	$(RANLIB) $@
+  endif
+
+$(T2EX_INSTALLDIR)/%: %
+	$(BD)/etc/backup_copy -t -d !OLD $< $(T2EX_INSTALLDIR)
+
+# generate dependencies
+ifdef DEPENDENCIES_OUTPUT
+  $(DEPS): ; touch $(DEPS)
+else
+  $(DEPS): $(SRC) ; $(MAKEDEPS) $@ $?
+endif
+-include $(DEPS)
+

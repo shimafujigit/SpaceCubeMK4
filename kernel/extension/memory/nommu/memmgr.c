@@ -35,7 +35,8 @@
 IMPORT	void	creUserSpace( void *laddr, INT nblk, INT rw );
 IMPORT	void	delUserSpace( void *laddr, INT nblk );
 #else
-#define	PAGESZ	(1 * 1024)
+//#define	PAGESZ	(1 * 1024)
+#define	PAGESZ	(4 * 1024)	/* For T2EX support */
 #endif
 
 /*

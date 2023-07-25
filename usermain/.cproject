@@ -34,6 +34,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/include/tkse&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/&quot;"/>
 								</option>
+								<option id="gnu.c.compiler.option.dialect.std.1645469392" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.463976576" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1539180452" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
@@ -43,11 +44,11 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.261627933" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker">
 								<option id="gnu.c.link.option.ldflags.58983201" name="Linker flags" superClass="gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="${bcc_model}" valueType="string"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.link.option.paths.1521953671" name="Library search path (-L)" superClass="gnu.c.link.option.paths" useByScannerDiscovery="false" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libtk}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libdrvif}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstr}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libsvc}/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libtm}/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/lib/libtk/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/lib/libdrvif/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/lib/libstr/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/lib/libsvc/${ConfigName}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/lib/libtm/${ConfigName}&quot;"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.link.option.libs.1667222049" name="Libraries (-l)" superClass="gnu.c.link.option.libs" useByScannerDiscovery="false" valueType="libs">
 									<listOptionValue builtIn="false" value="tk"/>
@@ -58,12 +59,12 @@
 									<listOptionValue builtIn="false" value="drv"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.link.option.userobjs.1852076973" name="Other objects" superClass="gnu.c.link.option.userobjs" useByScannerDiscovery="false" valueType="userObjs">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/config/${ConfigName}/config.o}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/monitor/${ConfigName}/monitor.o}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/kernel/${ConfigName}/kernel.o}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tkse/${ConfigName}/tkse.o}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/console/${ConfigName}/console.o}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rs/${ConfigName}/rs.o}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/config/${ConfigName}/config.o&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/monitor/${ConfigName}/monitor.o&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/kernel/${ConfigName}/kernel.o&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/tkse/${ConfigName}/tkse.o&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/drv/asp_leon5/console/${ConfigName}/console.o&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/drv/asp_leon5/rs/${ConfigName}/rs.o&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.989905839" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -195,4 +196,6 @@
 			<resource resourceType="PROJECT" workspacePath="/usermain"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

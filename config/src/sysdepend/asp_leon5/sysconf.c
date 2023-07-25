@@ -22,7 +22,7 @@ EXPORT const UB SYSCONF [] = {
 	"TMaxResId	60\n"
 	"TMaxSsyId	50\n"
 	"TMaxSsyPri	16\n"
-	"TSysStkSz	2048\n"
+	"TSysStkSz	4096\n"
 	"TSVCLimit	2\n"
 	"TTimPeriod	10\n"
 	"TMaxRegDev	32\n"
