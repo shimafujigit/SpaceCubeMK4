@@ -25,6 +25,7 @@
 #include <libstr.h>
 
 #include "userconfig.h"
+#include "spcmk4_spi.h"
 
 #ifndef	EXEC_TEST_SUITE
 /* Device drivers */
@@ -68,7 +69,9 @@ EXPORT	INT	usermain( void )
 	tm_printf("RsDrv - %s\n", (ercd < E_OK) ? "ERR" : "OK");
 #endif
 
-	/* Exec command */
+
+	spi_init();
+
 	command();
 
 	tm_putstring((UB*)"Push any key to shutdown the T-Kernel.\n");

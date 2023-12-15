@@ -26,6 +26,7 @@
 #include "config/tk_config_func.h"
 
 #include "userconfig.h"
+#include "spcmk4_spi.h"
 
 #if	USE_MYPRINTF
 #include "myprintf.c_inc"
@@ -152,30 +153,97 @@ EXPORT	INT	exec_cmd(char *cmd)
 /*
  *	Application main entry
  */
+
+#define BUFSIZE_SPI		(128)
+
 EXPORT	void	command( void )
 {
+	_UW		res = 0;
 	char	buf[128];
-	INT	fin, n;
+	char 	*send_data;		/* Send data buffer */
+	char 	*rcv_data;		/* Recive data buffer */
+	INT 	send_len = 0;	/* Data length */
+	INT		wk_len = 0;
+	INT		fin, n, i;
+
+	res = (_UW)Kmalloc(BUFSIZE_SPI+16);
+	if(res != 0)
+	{
+		if(res & 0x0000000F)
+			send_data = (res + 0x10) & 0xFFFFFFF0;
+		else
+			send_data = res;
+	}
+	else
+	{
+		P("Faild malloc send_data\\r\n");
+		return;
+	}
+
+	res = (_UW)Kmalloc(BUFSIZE_SPI+16);
+	if(res != 0)
+	{
+		if(res & 0x0000000F)
+			rcv_data = (res + 0x10) & 0xFFFFFFF0;
+		else
+			rcv_data = res;
+	}
+	else
+	{
+		P("Faild malloc rcv_data\\r\n");
+		return;
+	}
+
+
+	for(i=0; i<(BUFSIZE_SPI+16); i++)
+	{
+		send_data[i] = 0;
+		rcv_data[i] = 0;
+	}
+
 
 	/* command processing */
 	for (fin = 0; fin == 0; ) {
-		P("T2 >> ");
+		P("Input >> ");
 		Gets(buf, sizeof(buf));
 		for (n = strlen(buf); --n >= 0 && buf[n] < ' ';) buf[n] = '\0';
+		P("\r\n");
 
-		if (strncmp(buf, "quit", 1) == 0) {
+		if (strncmp(buf, "q", 1) == 0)
+		{
 			fin = 1;
-
-		} else if ( buf[0] == '#' ) {		/* tmonitor command */
-			tm_command((UB*)&buf[1]);
-
-		} else {				/* misc. command */
-			if (exec_cmd(buf) == 0) {
-				P("q[uit]      quit\n");
-				P("# [cmd]     exec t-monitor command\n");
-				P("?           command help\n");
-				P("<command>   misc. command\n");
+		}
+		/* Send data */
+		else if ( strncmp(buf, "0x", 2) == 0)
+		{
+			send_len = 0;
+			wk_len = strlen(buf) - 2;
+			/* Set sending data */
+			for(i=0; i<wk_len;i+=2)
+			{
+				send_data[send_len++] = ((buf[i+3]-0x30)<<4) + buf[i+2] - 0x30;
 			}
+			P("\r\n");
+			P("addr : data\r\n");
+			for(i=0; i<send_len; i++)
+			{
+				P("0x%08x : 0x%02x\r\n", (send_data+i), send_data[i]);
+			}
+			P("\r\n");
+
+			/* Start sending and receiving */
+			spi_SendRecive(send_data ,rcv_data ,send_len);
+			P("Recive : 0x");
+			for(i=0; i<send_len; i++)
+			{
+				P("%02x", rcv_data[i]);
+			}
+			P("\r\n\r\n");
+		}
+		else
+		{
+			P("q          quit\n");
+			P("0x[data]   Send data\n");
 		}
 	}
 }
